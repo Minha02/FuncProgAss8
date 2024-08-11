@@ -1,38 +1,49 @@
 object act81{
 
-    def cipherletterenc1(x: Char,shift:Int): Char={
-        var shiftx:Int = 0
-        if(((x+shift)%26>=10 || (x+shift)%26<13) ||((x+shift)%26>=15 || (x+shift)%26<18) ){
-            shiftx = x - (26-shift)
-        } else{
-            shiftx = x + shift
+    def Encryption(x: Char,shift:Int): Char={
+        val base:Int = if (x.isUpper) 'A'.toInt else 'a'.toInt
+        val range: Int = 26
+        var shiftInt:Int = 0
+        if((range - (x.toInt - base)) <= shift){
+            shiftInt = base + shift - (range - (x.toInt - base))
+        }else if(x.toInt == 32){
+            shiftInt = x.toInt
+        }else{
+            shiftInt = x.toInt + shift 
         }
-        shiftx.toChar
+        val shiftChar:Char = shiftInt.toChar
+        shiftChar
     }
 
     def CaeserCipherenc(txt: String,shift:Int):Unit={
-        val ciphtxt:String = txt.map(x=> cipherletterenc1(x,shift));
+        val ciphtxt:String = txt.map(x=> Encryption(x,shift));
         println(ciphtxt);
     }
 
-    def cipherletterdec(x: Char,shift:Int): Char={
-        var shiftx:Int = 0
-        if(((x+shift)%26>=10 || (x+shift)%26<13) ||((x+shift)%26>=15 || (x+shift)%26<18) ){
-            shiftx = x +(26-shift)
-        } else{
-            shiftx = x - shift
+    def Decryption(x: Char,shift:Int): Char={
+        val base:Int = if (x.isUpper) 'A'.toInt+shift else 'a'.toInt+shift
+        val range: Int = 26
+        var shiftInt:Int = 0
+        if((base - x.toInt ) <= shift && (base - x.toInt ) >0){
+            shiftInt = x.toInt +(range - shift)
+        }else if(x.toInt == 32){
+            shiftInt = x.toInt
+        }else{
+            shiftInt = x.toInt - shift 
         }
-        shiftx.toChar
+        val shiftChar:Char = shiftInt.toChar       
+        shiftChar
     }
 
     def CaeserCipherdec(txt:String,shift:Int):Unit ={
-        val ciphtxt:String = txt.map(x=> cipherletterdec(x,shift))
+        val ciphtxt:String = txt.map(x=> Decryption(x,shift))
         println(ciphtxt)
     }
 
     def main(args: Array[String])={
-    
-        CaeserCipherenc("XyZ",3)
-        CaeserCipherdec("aBc",3)
+        CaeserCipherenc("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z",4)
+        CaeserCipherdec("E F G H I J K L M N O P Q R S T U V W X Y Z A B C D",4)
+        CaeserCipherenc("a b c d e f g h i j k l m n o p q r s t u v w x y z",4)
+        CaeserCipherdec("e f g h i j k l m n o p q r s t u v w x y z a b c d",4)
     }
 }
